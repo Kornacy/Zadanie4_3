@@ -58,6 +58,23 @@ const allJokesCat = {
   'funnyJoke': funnyJoke,
   'lameJoke': lameJoke
 }
+app.get('/jokebook/joke/search', (req,res) =>{
+  const search = req.query.word;
+  //console.log(search)
+  let odp = []
+  categories.forEach(cat =>
+    allJokesCat[cat].forEach(j =>{
+      var obj = {}
+      if ((j.joke.includes(search)) || (j.response.includes(search)))
+        {
+          obj = {category: cat, joke: j.joke, response: j.response}
+          odp.push(obj)
+        }
+      }
+    )
+  )
+  res.json(odp);
+})
 app.get('/jokebook/categories', (req, res) => {
   res.json(categories);
 });
@@ -106,6 +123,7 @@ app.get('/jokebook/stats',(req,res) => {
   )
   res.json(odp);
 });
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

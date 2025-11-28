@@ -9,6 +9,8 @@ const jokeAddForm = document.getElementById("addjokeform");
 const divRes= document.getElementById("res");
 const statsBtn = document.getElementById("showstats");
 const statsTable = document.getElementById("tablediv");
+const searchForm = document.getElementById("search");
+const seachdiv = document.getElementById("searchresp");
 btn.addEventListener("click", async function () {
     const response = await fetch('/jokebook/random');
     const jokeData = await response.json();
@@ -58,6 +60,20 @@ statsBtn.addEventListener('click', async function(){
     content.forEach(elem =>tableContent += `<tr><td>${elem.category}</td><td>${elem.count}</td>`)
     tableContent += '</table>';
     statsTable.innerHTML = tableContent; 
+})
+searchForm.addEventListener("submit", async function(event){
+    event.preventDefault();
+    const wordValue = document.getElementById("searchtext").value
+
+    const resp = await fetch(`/jokebook/joke/search?word=${wordValue}`)
+    const found = await resp.json();
+    seachdiv.innerHTML = '';
+    let divcontent = '';
+    if (found == '')return seachdiv.innerHTML = "<p>Brak żartów pasujących do wyszukiwania</p>"
+    found.forEach(j =>
+        divcontent += `<p>[${j.category}]${j.joke} - ${j.response}</p>`
+    )
+    seachdiv.innerHTML = divcontent;
 })
 function getJokes(){
     const lameJokebtn = document.getElementById("lameJoke");
