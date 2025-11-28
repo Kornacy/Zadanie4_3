@@ -7,6 +7,8 @@ const jokeFirst = document.getElementById("jokeFirst");
 const jokeSec = document.getElementById("jokeSecond");
 const jokeAddForm = document.getElementById("addjokeform");
 const divRes= document.getElementById("res");
+const statsBtn = document.getElementById("showstats");
+const statsTable = document.getElementById("tablediv");
 btn.addEventListener("click", async function () {
     const response = await fetch('/jokebook/random');
     const jokeData = await response.json();
@@ -46,6 +48,16 @@ jokeAddForm.addEventListener("submit", async function(event) {
     }
     
     
+})
+
+statsBtn.addEventListener('click', async function(){
+    const resp = await fetch('/jokebook/stats');
+    const content = await resp.json();
+    //console.log(content);
+    let tableContent = '<table id="statstable"><th>Kategoria</th><th>Liczba żartów</th>'
+    content.forEach(elem =>tableContent += `<tr><td>${elem.category}</td><td>${elem.count}</td>`)
+    tableContent += '</table>';
+    statsTable.innerHTML = tableContent; 
 })
 function getJokes(){
     const lameJokebtn = document.getElementById("lameJoke");

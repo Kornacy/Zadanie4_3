@@ -54,6 +54,10 @@ let lameJoke = [
   }
 
 ];
+const allJokesCat = {
+  'funnyJoke': funnyJoke,
+  'lameJoke': lameJoke
+}
 app.get('/jokebook/categories', (req, res) => {
   res.json(categories);
 });
@@ -94,7 +98,14 @@ app.post('/jokebook/joke/:category', express.json(), (req, res) => {
   }
   res.status(201).json({ message: 'Joke added successfully' });
 });
-
+app.get('/jokebook/stats',(req,res) => {
+  let odp = [];
+  console.log(lameJoke.length)
+  categories.forEach(cat =>
+    odp.push( {category: cat, count: allJokesCat[cat].length})
+  )
+  res.json(odp);
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
