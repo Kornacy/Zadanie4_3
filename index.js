@@ -1,8 +1,9 @@
 'use strict';
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
-
+app.use(cors());
 // define endpoint for exercise 1 here
 let categories = ['funnyJoke', 'lameJoke'];
 

@@ -2,6 +2,11 @@ const btn = document.getElementById("fetchJokeBtn");
 const jokeDisplay = document.getElementById("jokeDisplay");
 const categoriesDisplay = document.getElementById("categoriesDisplay");
 const categoriesBtn = document.getElementById("fetchCategoriesBtn");
+const jokeCategory = document.getElementById("catselect");
+const jokeFirst = document.getElementById("jokeFirst");
+const jokeSec = document.getElementById("jokeSecond");
+const jokeAddForm = document.getElementById("addjokeform");
+const divRes= document.getElementById("res");
 btn.addEventListener("click", async function () {
     const response = await fetch('/jokebook/random');
     const jokeData = await response.json();
@@ -17,6 +22,31 @@ categoriesBtn.addEventListener("click", async function () {
     categoriesDisplay.innerHTML = content;
     getJokes();
 });
+jokeAddForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+    //console.log(jokeCategory.value);
+    //console.log(jokeFirst.value)
+    var joke= {"joke": jokeFirst.value, "response": jokeSec.value};
+    //console.log(joke);
+    const res = await fetch(`jokebook/joke/${jokeCategory.value}`,
+    {method: "POST",
+        headers:{
+            'Content-Type': 'application/json',
+            'host': 'http://127.0.0.1:3000'
+        },
+    body: JSON.stringify(joke)}
+    )
+    const wiad = await res;
+    const wiadtext= await wiad.json();
+    if (wiad.status == 400){
+        return divRes.innerHTML = wiadtext.error; 
+    }
+    if (wiad.status == 201){
+        return divRes.innerHTML = wiadtext.message; 
+    }
+    
+    
+})
 function getJokes(){
     const lameJokebtn = document.getElementById("lameJoke");
     const funnyJokebtn = document.getElementById("funnyJoke");
